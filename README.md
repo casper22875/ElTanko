@@ -33,7 +33,7 @@ Some of the other roadblocks were dealing with JSON files and how to parse those
 	and get them to run like they should. The original tutorial does
 	explain this pretty well and if know already how to work with JSON files
 	this part of the tutorial will be easier.
-The further I go thru this tutorial the more I will add to this README.
+The further i get thru this tutorial the more I will add to this readme.
 =======
 # ElTanko
 Example of game development using Ruby. Tutorial followed from this site: https://leanpub.com/developing-games-with-ruby/read
