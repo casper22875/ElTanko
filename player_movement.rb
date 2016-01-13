@@ -3,7 +3,7 @@ require 'gosu_tiled'
 require 'gosu_texture_packer'
 
 class Tank
-	attr accessor :x, :y, :body_angle, :gun_angle
+	attr_accessor :x, :y, :body_angle, :gun_angle
 	
 	def initialize(window, body, shadow, gun)
 		@x = window.width / 2
@@ -17,11 +17,12 @@ class Tank
 	end
 	
 	def update
-		atan = Math.atan(320 - @window.mouse_x,
-						 240 - @window.mouse_y)
-		@gun_angle = -atan * 180 / MATH::PI
+		atan1 = Math.atan(320 - @window.mouse_x)
+		atan2 = Math.atan(240 - @window.mouse_y)
+		atan = atan1 && atan2
+		@gun_angle = -atan * 180 / Math::PI
 		@body_angle = change_angle(@body_angle,
-			Gosu::Kbw, Gosu::Kbs, Gosu::Kba, Gosu::Kbd)
+			Gosu::KbA, Gosu::KbS, Gosu::KbA, Gosu::KbD)
 	end
 	
 	def draw
@@ -55,11 +56,12 @@ class Tank
 end
 	
 class GameWindow < Gosu::Window
+
 	MAP_FILE = File.join(File.dirname(
 	__FILE__), 'island.json')
 	UNIT_FILE = File.join(File.dirname(File.dirname(
 	__FILE__)), 'media', 'ground_units.json')
-	SPEED = 10
+	SPEED = 5
 	
 	def initialize
 		super(640, 480, false)
@@ -79,6 +81,41 @@ class GameWindow < Gosu::Window
 		true
 	end
 	
+	def button_down(id)
+		close if id == Gosu::KbEscape
+		@buttons_down += 1
+	end
+	
+	def button_up(id)
+		@buttons_down -= 1
+	end
+	
+	def update
+		@x -= SPEED if button_down?(Gosu::KbA)
+		@x += SPEED if button_down?(Gosu::KbD)
+		@y -= SPEED if button_down?(Gosu::KbW)
+		@y += SPEED if button_down?(Gosu::KbS)
+		@tank.update	
+			self.caption = "#{Gosu.fps} FPS. "
+				'use WASD and mouse to control tank'
+	end
+	
+	def draw
+		@first_render = false
+		@map.draw(@x, @y)
+		@tank.draw()
+	end
+end
+
+GameWindow.new.show
+		
+		
+		
+		
+		
+		
+		
+		
 	
 	
 	
